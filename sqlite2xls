@@ -16,22 +16,32 @@ out = sys.argv[2]
 con = lite.connect(db)
 cur = con.cursor()
 
-# Get column heads
-cur.execute('pragma table_info(player)')
-head = cur.fetchall()
-# Get row entries
-cur.execute('select * from player')
-players = cur.fetchall()
 
-# Open workbook and save head/body
-workbook = xlwt.Workbook()
-sheet = workbook.add_sheet('Sheet1')
-# head
-for col,item in enumerate(head):
-    sheet.write(0,col,item[1])
-# body
-for row,player in enumerate(players):
-    for col,item in enumerate(player):
-        sheet.write(row+1,col,item)
-# done
+# Get all the tables in this database
+cmd = "select name from sqlite_master where type = 'table' "
+cur.execute(cmd)
+tables = cur.fetchall()
+
+
+#import pdb;pdb.set_trace()
+for table in tables:
+    # Get column heads
+    cur.execute('pragma table_info(%s)' % table[0] )
+    head = cur.fetchall()
+    # Get row entries
+    cur.execute('select * from %s' % table[0] )
+    players = cur.fetchall()
+
+    # Open workbook and save head/body
+    workbook = xlwt.Workbook()
+    sheet = workbook.add_sheet(table[0])
+    # head
+    for col,item in enumerate(head):
+        sheet.write(0,col,item[1])
+    # body
+    for row,player in enumerate(players):
+        for col,item in enumerate(player):
+            sheet.write(row+1,col,item)
+    # done
+    
 workbook.save(out)
