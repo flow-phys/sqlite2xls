@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #  Date:   Aug 2014
 #  Author: Britton J. Olson
 #  Desc:   Convert sqlite database into an excel spreadsheet
@@ -10,10 +9,6 @@ import xlrd
 import sys
 import math
 import csv
-
-db = sys.argv[1]
-out = sys.argv[2]
-
 
 class sqlite2xls():
     def __init__(self,db):
@@ -173,19 +168,5 @@ class csv2sqlite():
         for d in sqdict:
             tup.append( [d,sqdict[d]] )
         return tup
-
-
-        
-        
-
-
-
-#csv = csv2sqlite('test.csv')
-#csv.writeSQL('NewSQL.db')
-
-
-isq = sqlite2xls(db)
-isq.writeXLS(out)
-#isq.writeCSV(out,'Sweep')
 
 
